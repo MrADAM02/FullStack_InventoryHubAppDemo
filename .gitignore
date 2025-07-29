@@ -1,0 +1,17 @@
+# Ignore build artifacts
+bin/
+obj/
+.vs/
+*.user
+*.db
+*.sqlite
+*.log
+*.pdb
+
+# Ignore Mac & Windows system files
+.DS_Store
+Thumbs.db
+
+# Ignore secrets or temp data
+*.env
+.env.*
