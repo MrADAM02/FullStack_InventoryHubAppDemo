@@ -40,7 +40,3 @@ app.MapGet("/api/productlist", () =>
 });
 
 app.Run();
-
-public record Product(int Id, string Name, double Price, int Stock, Category Category);
-
-public record Category(int Id, string Name);
