@@ -1,3 +1,5 @@
+using ServerApp.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS policy
@@ -16,27 +18,28 @@ var app = builder.Build();
 app.UseCors();
 
 
-app.MapGet("/api/productlist", () =>
+var productList = new List<Product>
 {
-    return new[]
+    new()
     {
-        new
-        {
-            Id = 1,
-            Name = "Laptop",
-            Price = 1200.50,
-            Stock = 25,
-            Category = new { Id = 101, Name = "Electronics" }
-        },
-        new
-        {
-            Id = 2,
-            Name = "Headphones",
-            Price = 50.00,
-            Stock = 100,
-            Category = new { Id = 102, Name = "Accessories" }
-        }
-    };
-});
+        Id = 1,
+        Name = "Laptop",
+        Price = 1200.50,
+        Stock = 25,
+        Category = new Category { Id = 101, Name = "Electronics" }
+    },
+    new()
+    {
+        Id = 2,
+        Name = "Headphones",
+        Price = 50.00,
+        Stock = 100,
+        Category = new Category { Id = 102, Name = "Accessories" }
+    }
+};
+
+app.MapGet("/api/productlist", () => productList);
+
 
 app.Run();
+

@@ -30,3 +30,4 @@ C:\Users\ahmad\source\repos\FullStack_InventoryHubAppDemo\ServerApp\obj\Debug\ne
 C:\Users\ahmad\source\repos\FullStack_InventoryHubAppDemo\ServerApp\obj\Debug\net9.0\ServerApp.pdb
 C:\Users\ahmad\source\repos\FullStack_InventoryHubAppDemo\ServerApp\obj\Debug\net9.0\ServerApp.genruntimeconfig.cache
 C:\Users\ahmad\source\repos\FullStack_InventoryHubAppDemo\ServerApp\obj\Debug\net9.0\ref\ServerApp.dll
+C:\Users\ahmad\source\repos\FullStack_InventoryHubAppDemo\ServerApp\obj\Debug\net9.0\ServerApp.sourcelink.json

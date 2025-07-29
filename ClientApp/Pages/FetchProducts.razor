@@ -1,5 +1,6 @@
 @page "/fetchproducts"
 @using System.Text.Json
+@using ClientApp.Services
 
 <h3>🛒 InventoryHub Product List</h3>
 
@@ -48,14 +49,17 @@ else
 
 @code {
     [Inject]
-    private HttpClient Http { get; set; } = default!;
-
+    private ProductService ProductService { get; set; } = default!;
     private Product[]? products;
     private string? errorMessage;
 
+
     protected override async Task OnInitializedAsync()
     {
-        try
+        products = await ProductService.GetProductsAsync();
+    }
+
+    @* try
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             var response = await Http.GetAsync("/api/productlist", cts.Token);
@@ -80,8 +84,8 @@ else
         catch (Exception ex)
         {
             errorMessage = $"An error occurred: {ex.Message}";
-        }
-    }
+        } *@
+
 
     public class Product
     {
