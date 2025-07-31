@@ -2,50 +2,52 @@
 @using System.Text.Json
 @using ClientApp.Services
 
-<h3>🛒 InventoryHub Product List</h3>
+<section class="product-list" aria-labelledby="product-list-heading">
+    <h3 id="product-list-heading" class="visually-hidden">InventoryHub Product List</h3>
 
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <div style="color:red; font-weight:bold; margin-bottom:1em;">
-        <span>⚠️ @errorMessage</span>
-    </div>
-}
-else if (products == null)
-{
-    <div>
-        <span style="color:gray;">Loading products...</span>
-    </div>
-}
-else if (products.Length == 0)
-{
-    <div>
-        <span style="color:orange;">No products available.</span>
-    </div>
-}
-else
-{
-    <table style="width:100%; border-collapse:collapse;">
-        <thead style="background:#f0f0f0;">
-            <tr>
-                <th style="padding:8px; border-bottom:1px solid #ccc;">Name</th>
-                <th style="padding:8px; border-bottom:1px solid #ccc;">Price</th>
-                <th style="padding:8px; border-bottom:1px solid #ccc;">Stock</th>
-                <th style="padding:8px; border-bottom:1px solid #ccc;">Category</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in products)
-            {
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-error" role="alert">
+            <span class="alert-icon">⚠️</span> @errorMessage
+        </div>
+    }
+    else if (products == null)
+    {
+        <div class="loading" aria-live="polite">
+            <span>Loading products...</span>
+        </div>
+    }
+    else if (!products.Any())
+    {
+        <div class="empty-state" aria-live="polite">
+            <span>No products available.</span>
+        </div>
+    }
+    else
+    {
+        <table class="product-table" role="grid">
+            <thead>
                 <tr>
-                    <td style="padding:8px; border-bottom:1px solid #eee;">@product.Name</td>
-                    <td style="padding:8px; border-bottom:1px solid #eee;">$@product.Price</td>
-                    <td style="padding:8px; border-bottom:1px solid #eee;">@product.Stock</td>
-                    <td style="padding:8px; border-bottom:1px solid #eee;">@(product.Category?.Name ?? "N/A")</td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Category</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var product in products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>$@product.Price.ToString("F2")</td>
+                        <td>@product.Stock</td>
+                        <td>@(product.Category?.Name ?? "N/A")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>
 
 @code {
     [Inject]
@@ -56,49 +58,28 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        products = await ProductService.GetProductsAsync();
-    }
-
-    @* try
+        try
         {
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            var response = await Http.GetAsync("/api/productlist", cts.Token);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                products = JsonSerializer.Deserialize<Product[]>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-            }
-            else
-            {
-                errorMessage = $"Error: {response.StatusCode}";
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            errorMessage = "Request timed out.";
+            products = await ProductService.GetProductsAsync();
         }
         catch (Exception ex)
         {
             errorMessage = $"An error occurred: {ex.Message}";
-        } *@
-
+        }
+    }
 
     public class Product
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public double Price { get; set; }
         public int Stock { get; set; }
-        public Category Category { get; set; }
+        public Category Category { get; set; } = new Category();
     }
 
     public class Category
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }
